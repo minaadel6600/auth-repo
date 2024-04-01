@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    res.send("What's up : "+ req.params.id);
+    res.send("aa "+ req.params.id);
 });
 
 export const UsersRoutes: Router = router;
