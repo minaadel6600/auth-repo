@@ -1,13 +1,13 @@
 import { Router } from "express";
+import AuthenticationController from "../controllers/authentication.controller";
 
+let authController = new AuthenticationController();
 const router: Router = Router();
 
 router.get('/', (req, res) => {
     res.send("What's up doc ?!");
 });
 
-router.get('/:id', (req, res) => {
-    res.send("aa "+ req.params.id);
-});
+router.get('/register', authController.registration);
 
 export const UsersRoutes: Router = router;

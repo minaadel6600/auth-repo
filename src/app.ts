@@ -5,6 +5,7 @@ import { MainRouter } from './routes/main-routes';
 // import { loadErrorHandlers } from './utilities/error-handling';
 // import session from 'express-session';
 import helmet from "helmet";
+import ErrorHandling from './middlewares/error-handlling';
 // import compression from "compression";
 // import { SESSION_SECRET } from "./utils/secrets";
 // import './database'; // initialize database
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 // ));
 app.use('/', MainRouter);
 
-// loadErrorHandlers(app);
+app.use(ErrorHandling)
 
 
 export default app;
