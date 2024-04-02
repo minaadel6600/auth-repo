@@ -15,6 +15,11 @@ import ErrorHandling from './middlewares/error-handlling';
 
 const app: Application = express();
 
+const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
+mongoose.connect(`mongodb://localhost:27017/Demo`).then(() => {
+  console.log("db is connected ...");
+});
+
 app.use(helmet());
 // app.use(compression());
 app.use(bodyParser.json());
