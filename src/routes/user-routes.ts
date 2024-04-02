@@ -8,6 +8,6 @@ router.get('/', (req, res) => {
     res.send("What's up doc ?!");
 });
 
-router.get('/register', authController.registration);
+router.post('/register', authController.registration);
 
 export const UsersRoutes: Router = router;
