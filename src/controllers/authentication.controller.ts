@@ -22,21 +22,21 @@ class AuthenticationController  {
   }
  
 
-   registration = async (request: Request, response: Response, next: NextFunction) => {
+  registration = async (request: Request, response: Response, next: NextFunction) => {
     const userData: CreateUserDto = request.body;
+    console.log(userData)
     try {
-      // const {
-      //   cookie,
-      //   user,
-      // }
-      let tt  = await this.authenticationService.register(userData,next);
-   //   response.setHeader('Set-Cookie', [cookie]);
-      response.send(tt);
+      const {
+        cookie,
+        user,
+      } = await this.authenticationService.register(userData);
+      response.setHeader('Set-Cookie', [cookie]);
+      response.send(user);
     } catch (error) {
-      console.log("errorerrorerrorerrorerror",error)
       next(error);
     }
   }
+
 
   // private loggingIn = async (request: Request, response: Response, next: NextFunction) => {
   //   const logInData: LogInDto = request.body;
