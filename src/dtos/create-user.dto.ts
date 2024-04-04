@@ -1,3 +1,4 @@
+import Joi from 'joi';
 
 export const createUserValidationSchema = Joi.object({
   firstName: Joi.string().alphanum().min(3).max(30).required(),
