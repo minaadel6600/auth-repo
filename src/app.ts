@@ -6,6 +6,7 @@ import { MainRouter } from './routes/main-routes';
 // import session from 'express-session';
 import helmet from "helmet";
 import ErrorHandling from './middlewares/error-handlling';
+import mongoose from 'mongoose';
 // import compression from "compression";
 // import { SESSION_SECRET } from "./utils/secrets";
 // import './database'; // initialize database

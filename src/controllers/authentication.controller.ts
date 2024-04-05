@@ -11,7 +11,7 @@ import * as jwt from 'jsonwebtoken';
 // import userModel from './../user/user.model';
 import AuthenticationService from '../services/authentication.service';
 import LogInDto from '../dtos/login.dto';
-import CreateUserDto from '../dtos/create-user.dto';
+import CreateUserDtoSchema from '../dtos/create-user.dto';
 
 class AuthenticationController  { 
   public authenticationService = new AuthenticationService();
@@ -23,7 +23,7 @@ class AuthenticationController  {
  
 
   registration = async (request: Request, response: Response, next: NextFunction) => {
-    const userData: CreateUserDto = request.body;
+    const userData = request.body;
     console.log(userData)
     try {
       const {

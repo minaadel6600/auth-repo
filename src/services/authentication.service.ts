@@ -21,18 +21,16 @@ interface DataStoredInToken {
 class AuthenticationService {
   public user = userModel;
 
-  public async register(userData: CreateUserDto) {
+  public async register(userData: IUser) {
     if (
       await this.user.findOne({ email: userData.email })
     ) {
-      throw new HttpError("UserWithThatEmailAlreadyExistsException " + userData.email,400); 
-    }
-
-     
-     const hashedPassword = await bcrypt.hash(userData.password, 10);
+      throw new HttpError(400,"UserWithThatEmailAlreadyExistsException " + userData.email); 
+    }      
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = await this.user.create({
       ...userData,
-      password: hashedPassword,
+      password: hashedPassword
     });
     const tokenData = this.createToken(user);
     const cookie = this.createCookie(tokenData);
