@@ -1,5 +1,5 @@
 import app from './app';
-import { APP_PORT } from "./utils/secrets";
+import { APP_PORT } from "./utils/constants";
 import logger from "./utils/logger";
 
 app

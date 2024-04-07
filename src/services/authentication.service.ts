@@ -1,14 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-// import UserWithThatEmailAlreadyExistsException from '../exceptions/UserWithThatEmailAlreadyExistsException';
-// import DataStoredInToken from '../interfaces/dataStoredInToken';
-// import CreateUserDto from '../user/user.dto';
-// import User from '../user/user.interface';
 import userModel, { IUser } from './../models/user.model';
-import CreateUserDto from '../dtos/create-user.dto';
-import { NextFunction } from 'express';
 import HttpError from '../models/error.model';
-import { GenericRepository } from './userRepo';
+import { GenericRepository } from './userRepo'; 
+import { ACCESS_TOKEN_SECRET } from '../utils/constants';
 
 
 interface ITokenData {
@@ -21,7 +16,7 @@ interface DataStoredInToken {
 }
 
 class AuthenticationService {
-//  public user = userModel;
+  //  public user = userModel;
   public db = new GenericRepository<IUser>(userModel);
 
   public async register(userData: IUser) {
@@ -41,12 +36,27 @@ class AuthenticationService {
       user,
     };
   }
+
+  public async login(loginData: { email: string, password: string }) {
+
+    const user = await this.db.findOne({ email: loginData.email });
+    if (!user)throw new HttpError(404, "EmailOrPasswordInvalid");
+
+    const isPasswordMatching = await bcrypt.compare(
+      loginData.password,
+      user.get('password', null, { getters: false }),
+    );
+
+    if (!isPasswordMatching)throw new HttpError(404, "EmailOrPasswordInvalid");
+
+    return user;
+  }
   public createCookie(tokenData: ITokenData) {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
   }
   public createToken(user: IUser): ITokenData {
     const expiresIn = 60 * 60; // an hour
-    const secret = process.env.JWT_SECRET || "secret";
+    const secret = ACCESS_TOKEN_SECRET;
     const dataStoredInToken: DataStoredInToken = {
       _id: user._id,
     };

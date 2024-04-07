@@ -6,7 +6,7 @@ const ErrorHandling = (error: ErrorModel, req: Request, res: Response, next: Nex
     if (!error.statusCode) error.statusCode = 500;
     if (!error.message) error.message = "Something went wrong";
 
-    res.status(error.statusCode).json({ statusCode: error.statusCode, message: error.message })
+    res.status(error.statusCode).json({ message: error.message })
 
 }
 

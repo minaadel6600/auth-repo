@@ -12,18 +12,22 @@ import * as jwt from 'jsonwebtoken';
 import AuthenticationService from '../services/authentication.service';
 import LogInDto from '../dtos/login.dto';
 import CreateUserDtoSchema from '../dtos/create-user.dto';
+import LoginDtoSchema from '../dtos/login.dto';
+import { generateAccessToken } from '../utils/jwt/helpers/access-token.helper';
+import { generateRefreshToken } from '../utils/jwt/helpers/refresh-token.helper';
+import { resSuccess } from '../utils/response.helper';
 
-class AuthenticationController  { 
+class AuthenticationController {
 
   public authenticationService = new AuthenticationService();
   //private user = userModel;
 
   constructor() {
-   
-  }
- 
 
-  registration = async (request: Request, response: Response, next: NextFunction) => {
+  }
+
+
+  public registration = async (request: Request, response: Response, next: NextFunction) => {
     const userData = request.body;
     console.log(userData)
     try {
@@ -32,32 +36,30 @@ class AuthenticationController  {
         user,
       } = await this.authenticationService.register(userData);
       response.setHeader('Set-Cookie', [cookie]);
-      response.send(user);
+      response.send({ user });
     } catch (error) {
       next(error);
     }
   }
 
 
-  // private loggingIn = async (request: Request, response: Response, next: NextFunction) => {
-  //   const logInData: LogInDto = request.body;
-  //   const user = await this.user.findOne({ email: logInData.email });
-  //   if (user) {
-  //     const isPasswordMatching = await bcrypt.compare(
-  //       logInData.password,
-  //       user.get('password', null, { getters: false }),
-  //     );
-  //     if (isPasswordMatching) {
-  //       const tokenData = this.createToken(user);
-  //       response.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-  //       response.send(user);
-  //     } else {
-  //       next(new WrongCredentialsException());
-  //     }
-  //   } else {
-  //     next(new WrongCredentialsException());
-  //   }
-  // }
+  public logIn = async (request: Request, response: Response, next: NextFunction) => {
+
+    try {
+      const logInData = request.body;
+      const user = await this.authenticationService.login(logInData);
+      const JWTPayload = { id: user._id, email: user.email, role: user.role };
+      const accessToken = generateAccessToken(JWTPayload, '5h');
+      const refreshToken = generateRefreshToken(JWTPayload, '5d');
+
+      const message = 'Login success';
+      return resSuccess(response, 200, message, { accessToken, refreshToken });
+
+    } catch (error) {
+      next(error);
+    }
+
+  }
 
   // private loggingOut = (request: Request, response: Response) => {
   //   response.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
