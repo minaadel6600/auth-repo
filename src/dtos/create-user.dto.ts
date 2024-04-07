@@ -1,5 +1,4 @@
 import Joi from 'joi'; 
-import { join } from 'lodash';
 
  const CreateUserDtoSchema = Joi.object({
   firstName: Joi.string().alphanum().min(3).max(30).required(),
@@ -11,8 +10,10 @@ import { join } from 'lodash';
     tlds: { allow: ['com', 'net'] }, // allowed domains
   }).required(),
   address: Joi.object({
-    city: Joi.required()
-  })
+    city: Joi.required(),
+    street:Joi.string()
+  }),
+  mobile:Joi.string().required().min(11)
 });
 
 export default CreateUserDtoSchema;

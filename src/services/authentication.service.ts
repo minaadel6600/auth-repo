@@ -8,6 +8,8 @@ import userModel, { IUser } from './../models/user.model';
 import CreateUserDto from '../dtos/create-user.dto';
 import { NextFunction } from 'express';
 import HttpError from '../models/error.model';
+import { GenericRepository } from './userRepo';
+
 
 interface ITokenData {
   token: string;
@@ -19,19 +21,19 @@ interface DataStoredInToken {
 }
 
 class AuthenticationService {
-  public user = userModel;
+//  public user = userModel;
+  public db = new GenericRepository<IUser>(userModel);
 
   public async register(userData: IUser) {
     if (
-      await this.user.findOne({ email: userData.email })
+      await this.db.findOne({ email: userData.email })
     ) {
-      throw new HttpError(400,"UserWithThatEmailAlreadyExistsException " + userData.email); 
-    }      
+      throw new HttpError(400, "UserWithThatEmailAlreadyExistsException " + userData.email);
+    }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const user = await this.user.create({
-      ...userData,
-      password: hashedPassword
-    });
+    userData.password = hashedPassword;
+
+    let user = await this.db.Create(userData);
     const tokenData = this.createToken(user);
     const cookie = this.createCookie(tokenData);
     return {

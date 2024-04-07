@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     refreshToken: String,
     password: {
       type: String,
-      get: (): undefined => undefined,
+      //get: (): undefined => undefined,
     },
   },
   {

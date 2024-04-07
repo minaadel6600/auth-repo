@@ -14,6 +14,7 @@ import LogInDto from '../dtos/login.dto';
 import CreateUserDtoSchema from '../dtos/create-user.dto';
 
 class AuthenticationController  { 
+
   public authenticationService = new AuthenticationService();
   //private user = userModel;
 
