@@ -15,7 +15,8 @@ import CreateUserDtoSchema from '../dtos/create-user.dto';
 import LoginDtoSchema from '../dtos/login.dto';
 import { generateAccessToken } from '../utils/jwt/helpers/access-token.helper';
 import { generateRefreshToken } from '../utils/jwt/helpers/refresh-token.helper';
-import { resSuccess } from '../utils/response.helper';
+import { resSuccess } from '../utils/response.helper'; 
+import { getTranslatedMessage } from '../utils/translate';
 
 class AuthenticationController {
 
@@ -27,33 +28,33 @@ class AuthenticationController {
   }
 
 
-  public registration = async (request: Request, response: Response, next: NextFunction) => {
-    const userData = request.body;
+  public registration = async (req: Request, res: Response, next: NextFunction) => {
+    const userData = req.body;
     console.log(userData)
     try {
       const {
         cookie,
         user,
-      } = await this.authenticationService.register(userData);
-      response.setHeader('Set-Cookie', [cookie]);
-      response.send({ user });
+      } = await this.authenticationService.register(req,userData);
+      res.setHeader('Set-Cookie', [cookie]);
+      res.send({ user });
     } catch (error) {
       next(error);
     }
   }
 
 
-  public logIn = async (request: Request, response: Response, next: NextFunction) => {
+  public logIn = async (req: any, res: Response, next: NextFunction) => {
 
     try {
-      const logInData = request.body;
+      const logInData = req.body;
       const user = await this.authenticationService.login(logInData);
       const JWTPayload = { id: user._id, email: user.email, role: user.role };
       const accessToken = generateAccessToken(JWTPayload, '5h');
       const refreshToken = generateRefreshToken(JWTPayload, '5d');
 
-      const message = 'Login success';
-      return resSuccess(response, 200, message, { accessToken, refreshToken });
+      const message = getTranslatedMessage(req,'USER_LOGGED_SUCCESS');
+      return resSuccess(req,res, 200, message, { accessToken, refreshToken });
 
     } catch (error) {
       next(error);

@@ -15,3 +15,4 @@ export const DB_NAME       = _.defaultTo(process.env.DB_NAME, "testDB");
 export const ACCESS_TOKEN_SECRET     = _.defaultTo(process.env.ACCESS_TOKEN_SECRET, "access_secret");
 export const REFRESH_TOKEN_SECRET     = _.defaultTo(process.env.REFRESH_TOKEN_SECRET, "refresh_secret");
 export const LOG_DIRECTORY  = _.defaultTo(process.env.LOG_DIRECTORY, path.resolve('logs'));
+export const DEFAULT_LANGUAGE  = _.defaultTo(process.env.DEFAULT_LANGUAGE, 'ar');

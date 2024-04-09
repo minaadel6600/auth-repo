@@ -4,6 +4,7 @@ import userModel, { IUser } from './../models/user.model';
 import HttpError from '../models/error.model';
 import { GenericRepository } from './userRepo'; 
 import { ACCESS_TOKEN_SECRET } from '../utils/constants';
+import { getTranslatedMessage } from '../utils/translate';
 
 
 interface ITokenData {
@@ -19,11 +20,11 @@ class AuthenticationService {
   //  public user = userModel;
   public db = new GenericRepository<IUser>(userModel);
 
-  public async register(userData: IUser) {
+  public async register(req:any,userData: IUser) {
     if (
       await this.db.findOne({ email: userData.email })
     ) {
-      throw new HttpError(400, "UserWithThatEmailAlreadyExistsException " + userData.email);
+      throw new HttpError(400, getTranslatedMessage(req,'EMAIL_ALREADY_REGISTERED')+ ' ' + userData.email);
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;

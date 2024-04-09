@@ -5,6 +5,8 @@
  */
 
 import { Response } from 'express';
+import logger from './logger';
+import { Request } from 'express-serve-static-core';
 
 /**
  * @description Make success response
@@ -14,7 +16,14 @@ import { Response } from 'express';
  * @param {object | any} data - Data response
  * @returns {Response} - Express response object
  */
-export function resSuccess(res: Response, status: number, message: string, data?: object | any): Response {
+export function resSuccess(req:Request,res: Response, status: number, message: string, data?: object | any): Response {
+    let userId, msg, url, statusCode;
+    userId = (req?.body?.user) ? req?.body?.user._id : "";
+    msg = " (msg): " + message;
+    url = "(url): " + req.url;
+    statusCode = " (status): "+ status;
+
+    logger.info(url + statusCode + userId + msg) 
     return res.status(status).type('application/json').json({ success: true, message, data });
 }
 
