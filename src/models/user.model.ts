@@ -6,6 +6,7 @@ export interface IUser {
   lastName: string;
   fullName: string;
   email: string;
+  roles:[role];
   password: string;
   address?: {
     street: string,
@@ -20,7 +21,7 @@ const addressSchema = new mongoose.Schema({
 });
 
 export enum role{
-  'admin', 'agent', 'end-user'
+  'admin', 'agent', 'end-user' ,''
 }
 
 const userSchema = new mongoose.Schema(
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema(
     firstName: String,
     lastName: String,
     refreshToken: String,
-    role: {
+    roles: {
       type: [String],
       enum: [role],
       default: ['end-user'],
@@ -51,11 +52,11 @@ userSchema.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 
-userSchema.virtual('posts', {
-  ref: 'Post',
-  localField: '_id',
-  foreignField: 'author',
-});
+// userSchema.virtual('posts', {
+//   ref: 'Post',
+//   localField: '_id',
+//   foreignField: 'author',
+// });
 
 const userModel = mongoose.model<IUser & mongoose.Document>('User', userSchema);
 

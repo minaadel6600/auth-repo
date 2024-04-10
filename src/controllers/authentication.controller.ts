@@ -48,7 +48,7 @@ class AuthenticationController {
     try {
       const logInData = req.body;
       const user = await this.authenticationService.login(logInData);
-      const JWTPayload = { id: user._id, email: user.email, role: user.role };
+      const JWTPayload = { id: user._id,role: user.role };
       const accessToken = generateAccessToken(JWTPayload, '5h');
       const refreshToken = generateRefreshToken(JWTPayload, '5d');
 

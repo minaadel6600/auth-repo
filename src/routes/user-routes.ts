@@ -10,10 +10,6 @@ import AuthorizeRole from "../middlewares/role-authorize";
 let authController = new AuthenticationController();
 const router: Router = Router();
 
-router.get('/', (req, res) => {
-    res.send("What's up doc ?!");
-});
-
 router.post('/register',dataValidator(CreateUserDtoSchema), authController.registration);
 router.post('/login',dataValidator(LoginDtoSchema), authController.logIn);
 
