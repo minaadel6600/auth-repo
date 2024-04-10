@@ -2,9 +2,9 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import userModel, { IUser } from './../models/user.model';
 import HttpError from '../models/error.model';
-import { GenericRepository } from './userRepo'; 
+import { GenericRepository } from './userRepo';
 import { ACCESS_TOKEN_SECRET } from '../utils/constants';
-import { getTranslatedMessage } from '../utils/translate';
+import { getTranslatedMessage } from '../utils/locales/translate-helpers';
 
 
 interface ITokenData {
@@ -20,11 +20,11 @@ class AuthenticationService {
   //  public user = userModel;
   public db = new GenericRepository<IUser>(userModel);
 
-  public async register(req:any,userData: IUser) {
+  public async register(req: any, userData: IUser) {
     if (
       await this.db.findOne({ email: userData.email })
     ) {
-      throw new HttpError(400, getTranslatedMessage(req,'EMAIL_ALREADY_REGISTERED')+ ' ' + userData.email);
+      throw new HttpError(400, getTranslatedMessage(req, 'EMAIL_ALREADY_REGISTERED') + ' ' + userData.email);
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;
@@ -41,14 +41,14 @@ class AuthenticationService {
   public async login(loginData: { email: string, password: string }) {
 
     const user = await this.db.findOne({ email: loginData.email });
-    if (!user)throw new HttpError(404, "EmailOrPasswordInvalid");
+    if (!user) throw new HttpError(404, "EmailOrPasswordInvalid");
 
     const isPasswordMatching = await bcrypt.compare(
       loginData.password,
       user.get('password', null, { getters: false }),
     );
 
-    if (!isPasswordMatching)throw new HttpError(404, "EmailOrPasswordInvalid");
+    if (!isPasswordMatching) throw new HttpError(404, "EmailOrPasswordInvalid");
 
     return user;
   }

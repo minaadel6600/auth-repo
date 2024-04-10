@@ -15,8 +15,8 @@ import CreateUserDtoSchema from '../dtos/create-user.dto';
 import LoginDtoSchema from '../dtos/login.dto';
 import { generateAccessToken } from '../utils/jwt/helpers/access-token.helper';
 import { generateRefreshToken } from '../utils/jwt/helpers/refresh-token.helper';
-import { resSuccess } from '../utils/response.helper'; 
-import { getTranslatedMessage } from '../utils/translate';
+import { resSuccess } from '../utils/response.helper';
+import { getTranslatedMessage } from '../utils/locales/translate-helpers';
 
 class AuthenticationController {
 
@@ -30,12 +30,11 @@ class AuthenticationController {
 
   public registration = async (req: Request, res: Response, next: NextFunction) => {
     const userData = req.body;
-    console.log(userData)
     try {
       const {
         cookie,
         user,
-      } = await this.authenticationService.register(req,userData);
+      } = await this.authenticationService.register(req, userData);
       res.setHeader('Set-Cookie', [cookie]);
       res.send({ user });
     } catch (error) {
@@ -53,8 +52,8 @@ class AuthenticationController {
       const accessToken = generateAccessToken(JWTPayload, '5h');
       const refreshToken = generateRefreshToken(JWTPayload, '5d');
 
-      const message = getTranslatedMessage(req,'USER_LOGGED_SUCCESS');
-      return resSuccess(req,res, 200, message, { accessToken, refreshToken });
+      const message = getTranslatedMessage(req, 'USER_LOGGED_SUCCESS');
+      return resSuccess(req, res, 200, message, { accessToken, refreshToken });
 
     } catch (error) {
       next(error);

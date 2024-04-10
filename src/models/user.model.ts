@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose'; 
+import * as mongoose from 'mongoose';
 
 export interface IUser {
   _id: string;
@@ -19,12 +19,21 @@ const addressSchema = new mongoose.Schema({
   street: String,
 });
 
+export enum role{
+  'admin', 'agent', 'end-user'
+}
+
 const userSchema = new mongoose.Schema(
   {
     email: String,
     firstName: String,
     lastName: String,
     refreshToken: String,
+    role: {
+      type: [String],
+      enum: [role],
+      default: ['end-user'],
+    },
     password: {
       type: String,
       get: (): undefined => undefined,

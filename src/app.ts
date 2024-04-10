@@ -9,6 +9,7 @@ import ErrorHandling from './middlewares/error-handlling';
 import mongoose from 'mongoose';
 import { DB_NAME, DB_PORT, DB_URL } from './utils/constants';
 import Logger from './utils/logger';
+import AuthorizeRole from './middlewares/role-authorize';
 // import compression from "compression";
 // import { SESSION_SECRET } from "./utils/secrets";
 // import './database'; // initialize database
