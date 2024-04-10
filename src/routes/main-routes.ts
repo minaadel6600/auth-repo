@@ -1,11 +1,10 @@
 import { Router } from 'express';
-
 import { UsersRoutes } from './user-routes';
-import AuthorizeRole from '../middlewares/role-authorize';
-import { role } from '../models/user.model';
+import { bookRoutes } from './book-routes';
 
 const router: Router = Router();                            
 
-router.use('/users',AuthorizeRole([]), UsersRoutes); 
+router.use('/users', UsersRoutes); 
+router.use('/books', bookRoutes); 
 
 export const MainRouter: Router = router; 
