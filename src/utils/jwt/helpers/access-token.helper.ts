@@ -24,6 +24,7 @@ export function generateAccessToken(payload: object | string = {}, expired: stri
  * @returns {Promise<object | string | undefined>}
  */
 export function verifyAccessToken(token: string): Promise<object | string | undefined> {
+    console.log(token)
     return verifyToken(token, ACCESS_TOKEN_SECRET);
 }
 

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { IUser } from './../models/user.model';
+import userModel, { IUser } from './../models/user.model';
 import HttpError from '../models/error.model';
 import { ACCESS_TOKEN_SECRET } from '../utils/constants';
 import { getTranslatedMessage } from '../utils/locales/translate-helpers';
@@ -21,7 +21,7 @@ class AuthenticationService {
 
   public async register(req: any, userData: IUser) {
     if (
-      await this.userRepository.findOne({ email: userData.email })
+      await this.userRepository.getOne({ email: userData.email })
     ) {
       throw new HttpError(400, getTranslatedMessage(req, 'EMAIL_ALREADY_REGISTERED') + ' ' + userData.email);
     }
@@ -39,13 +39,18 @@ class AuthenticationService {
 
   public async login(loginData: { email: string, password: string }) {
 
-    const user = await this.userRepository.findOne({ email: loginData.email });
+   
+    const user:IUser = await this.userRepository.getOne({ email: loginData.email });
+  
     if (!user) throw new HttpError(404, "EmailOrPasswordInvalid");
 
+    console.log(user)
     const isPasswordMatching = await bcrypt.compare(
-      loginData.password,
-      user.get('password', null, { getters: false }),
+      loginData.password, 
+       user.password
     );
+    console.log(isPasswordMatching)
+    
 
     if (!isPasswordMatching) throw new HttpError(404, "EmailOrPasswordInvalid");
 

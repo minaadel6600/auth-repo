@@ -21,7 +21,7 @@ const addressSchema = new mongoose.Schema({
 });
 
 export enum role{
-  'admin', 'agent', 'end-user' ,''
+  admin='admin', agent ='agent', end_user = 'end_user'
 }
 
 const userSchema = new mongoose.Schema(
@@ -36,8 +36,7 @@ const userSchema = new mongoose.Schema(
       default: ['end-user'],
     },
     password: {
-      type: String,
-      get: (): undefined => undefined,
+      type: String
     },
   },
   {

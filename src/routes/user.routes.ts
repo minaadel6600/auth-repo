@@ -6,12 +6,14 @@ import LoginDtoSchema from "../dtos/login.dto";
 import Authorize from "../middlewares/role-authorize";
 import { role } from "../models/user.model";
 import AuthorizeRole from "../middlewares/role-authorize";
+import UsersController from "../controllers/user.controller"; 
+import auth from "../middlewares/auth.middleware";
 
-let authController = new AuthenticationController();
+let usersController = new UsersController();
 const router: Router = Router();
 
-router.post('/register',dataValidator(CreateUserDtoSchema), authController.registration);
-router.post('/login',dataValidator(LoginDtoSchema), authController.logIn);
+router.get('/',auth , AuthorizeRole([role.end_user]),usersController.getAllUsers);
+router.get('/:id',dataValidator(LoginDtoSchema), usersController.getAllUsers);
 
 
 export const UsersRoutes: Router = router;

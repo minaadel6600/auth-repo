@@ -1,11 +1,12 @@
 import express from 'express';
 import { Application } from 'express';
 import * as bodyParser from 'body-parser';
-import { MainRouter } from './routes/main-routes';
+import { MainRouter } from './routes/main.routes';
 import helmet from "helmet";
 import ErrorHandling from './middlewares/error-handlling';
 import mongoose from 'mongoose';
 import { DB_NAME, DB_PORT, DB_URL } from './utils/constants';
+import auth from './middlewares/auth.middleware';
 
 
 const app: Application = express();
