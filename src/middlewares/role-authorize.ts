@@ -9,8 +9,7 @@ const AuthorizeRole = (allowedRoles: role[]) => {
   return async (req: IRequest, res: Response, next: NextFunction) => {
 
     try {
-      const userRoles = req.user?.roles || [];
-      console.log('userRoles',allowedRoles)
+      const userRoles = req.user?.roles || []; 
       // if not at least one role exist in allowed roles then break the process
       if (!userRoles.some((r) => allowedRoles.includes(r))) {
         throw new HttpError(401,

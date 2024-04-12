@@ -16,3 +16,6 @@ export const ACCESS_TOKEN_SECRET     = _.defaultTo(process.env.ACCESS_TOKEN_SECR
 export const REFRESH_TOKEN_SECRET     = _.defaultTo(process.env.REFRESH_TOKEN_SECRET, "refresh_secret");
 export const LOG_DIRECTORY  = _.defaultTo(process.env.LOG_DIRECTORY, path.resolve('logs'));
 export const DEFAULT_LANGUAGE  = _.defaultTo(process.env.DEFAULT_LANGUAGE, 'ar');
+export const ACCESS_TOKEN_TIME_IN_HOURS  = 5;
+export const REFRESH_TOKEN_TIME_IN_DAYS  = 5; //_.defaultTo(process.env.DEFAULT_LANGUAGE, 'ar');
+
