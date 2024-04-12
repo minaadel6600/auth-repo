@@ -7,7 +7,7 @@ import ErrorHandling from './middlewares/error-handlling';
 import mongoose from 'mongoose';
 import { DB_NAME, DB_PORT, DB_URL } from './utils/constants';
 import auth from './middlewares/auth.middleware';
-
+import cookieParser  from 'cookie-parser';
 
 const app: Application = express();
 
@@ -16,6 +16,7 @@ mongoose.connect(`${DB_URL}:${DB_PORT}/${DB_NAME}`).then(() => {
 });
 
 app.use(helmet());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/', MainRouter);
 app.use(ErrorHandling)

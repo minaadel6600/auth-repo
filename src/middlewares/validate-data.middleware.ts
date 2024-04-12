@@ -1,9 +1,10 @@
 import {Request,Response, NextFunction } from 'express'; 
 import HttpError from '../models/error.model';
+import IRequest from '../interfaces/i-request';
 
 const dataValidator = (dataSchema:any) => {
   return  async ( 
-  req: Request,
+  req: IRequest,
   res: Response,
   next: NextFunction
 ) => {

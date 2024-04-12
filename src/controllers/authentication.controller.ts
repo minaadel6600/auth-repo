@@ -1,15 +1,5 @@
-// import * as bcrypt from 'bcrypt';
 import { Request, Response, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken';
-// import WrongCredentialsException from '../exceptions/WrongCredentialsException';
-// import Controller from '../interfaces/controller.interface';
-// import DataStoredInToken from '../interfaces/dataStoredInToken';
-// import TokenData from '../interfaces/tokenData.interface';
-// import validationMiddleware from '../middleware/validation.middleware';
-// import CreateUserDto from '../user/user.dto';
-// import User from '../user/user.interface';
-// import userModel from './../user/user.model';
-import AuthenticationService from '../services/authentication.service';
+import AuthenticationService, { ICookieData } from '../services/authentication.service';
 import LogInDto from '../dtos/login.dto';
 import CreateUserDtoSchema from '../dtos/create-user.dto';
 import LoginDtoSchema from '../dtos/login.dto';
@@ -17,25 +7,20 @@ import { generateAccessToken } from '../utils/jwt/helpers/access-token.helper';
 import { generateRefreshToken } from '../utils/jwt/helpers/refresh-token.helper';
 import { resSuccess } from '../utils/response.helper';
 import { getTranslatedMessage } from '../utils/locales/translate-helpers';
+import IRequest from '../interfaces/i-request';
 
 class AuthenticationController {
 
   public authenticationService = new AuthenticationService();
-  //private user = userModel;
-
-  constructor() {
-
-  }
-
 
   public registration = async (req: Request, res: Response, next: NextFunction) => {
     const userData = req.body;
     try {
       const {
-        cookie,
+        //  cookie,
         user,
-      } = await this.authenticationService.register(req, userData);
-      res.setHeader('Set-Cookie', [cookie]);
+      } = await this.authenticationService.registerService(req, userData);
+      //res.setHeader('Set-Cookie', [cookie]);
       res.send({ user });
     } catch (error) {
       next(error);
@@ -43,16 +28,21 @@ class AuthenticationController {
   }
 
 
-  public logIn = async (req: any, res: Response, next: NextFunction) => {
+  public logIn = async (req: IRequest, res: Response, next: NextFunction) => {
 
     try {
       const logInData = req.body;
-      const user = await this.authenticationService.login(logInData);
-      const JWTPayload = { id: user._id,roles: user.roles };
+      const user = await this.authenticationService.loginService(logInData);
+      const JWTPayload = { id: user._id };
       const accessToken = generateAccessToken(JWTPayload, '5h');
-      const refreshToken = generateRefreshToken(JWTPayload, '5d');
+      const refreshToken = generateRefreshToken(JWTPayload, '5d'); 
+
+      let cookie = this.authenticationService.createCookie(refreshToken,5)
+      res.setHeader('Set-Cookie', [cookie]);
 
       const message = getTranslatedMessage(req, 'USER_LOGGED_SUCCESS');
+
+
       return resSuccess(req, res, 200, message, { accessToken, refreshToken });
 
     } catch (error) {
@@ -61,26 +51,28 @@ class AuthenticationController {
 
   }
 
-  // private loggingOut = (request: Request, response: Response) => {
-  //   response.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
-  //   response.send(200);
-  // }
+  public refreshTokens = async (req: IRequest, res: Response, next: NextFunction) => {
 
-  // private createCookie(tokenData: TokenData) {
-  //   return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
-  // }
+    try {
 
-  // private createToken(user: User): TokenData {
-  //   const expiresIn = 60 * 60; // an hour
-  //   const secret = process.env.JWT_SECRET;
-  //   const dataStoredInToken: DataStoredInToken = {
-  //     _id: user._id,
-  //   };
-  //   return {
-  //     expiresIn,
-  //     token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
-  //   };
-  // }
+      const oldRefreshToken = req.cookies['Refresh-Token'];
+      console.log(req.cookies)
+      const user = await this.authenticationService.verifyRefreshTokenService(oldRefreshToken);
+      const JWTPayload = { id: user._id };
+      const accessToken = generateAccessToken(JWTPayload, '5h');
+      const refreshToken = generateRefreshToken(JWTPayload, '5d');
+
+      let cookie = this.authenticationService.createCookie(refreshToken,5)
+      res.setHeader('Set-Cookie', [cookie]); 
+
+      const message = getTranslatedMessage(req, 'TOKENS_GENERATED_SUCCESS');
+      return resSuccess(req, res, 200, message, { accessToken , refreshToken });
+
+    } catch (error) {
+      next(error);
+    }
+
+  }
 
 }
 

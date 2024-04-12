@@ -12,6 +12,8 @@ const router: Router = Router();
 
 router.post('/register',dataValidator(CreateUserDtoSchema), authController.registration);
 router.post('/login',dataValidator(LoginDtoSchema), authController.logIn);
+router.post('/refresh-token', authController.refreshTokens);
+
 
 
 export const AuthRoutes: Router = router;

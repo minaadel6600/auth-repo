@@ -12,8 +12,10 @@ import auth from "../middlewares/auth.middleware";
 let usersController = new UsersController();
 const router: Router = Router();
 
-router.get('/',auth , AuthorizeRole([role.end_user]),usersController.getAllUsers);
+router.get('/',auth , AuthorizeRole([role.admin]),usersController.getAllUsers);
 router.get('/:id',dataValidator(LoginDtoSchema), usersController.getAllUsers);
+router.put('/:id',dataValidator(CreateUserDtoSchema), usersController.getAllUsers);
+
 
 
 export const UsersRoutes: Router = router;

@@ -5,7 +5,8 @@ export enum en {
   EMAIL_PASSWORD_INVALID = "Email or password invalid",
   EMAIL_ALREADY_REGISTERED = "Email is already registered before",
   USER_UNAUTHORIZED = "User not allowed to access this resource",
-  INVALID_TOKEN = "Invalid token"
+  INVALID_TOKEN = "Invalid token",
+  TOKENS_GENERATED_SUCCESS = "tokens generated successfully"
 
 }
 
@@ -15,6 +16,8 @@ export enum ar {
   EMAIL_PASSWORD_INVALID = "البريد الالكتروني او كلمة المرور غير صحيح",
   EMAIL_ALREADY_REGISTERED = "تم التسحيل بهذا البريد من قبل",
   USER_UNAUTHORIZED = "هذا المستخدم ليس لديه الصلاحيات لعرض هذه البيانات",
-  INVALID_TOKEN = "غير صالح token"
+  INVALID_TOKEN = "غير صالح token",
+  TOKENS_GENERATED_SUCCESS = "tokens generated successfully"
+
 }
 
