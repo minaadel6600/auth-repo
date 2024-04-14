@@ -1,11 +1,10 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import userModel, { IUser } from './../models/user.model';
+import { IUser } from './../models/user.model';
 import HttpError from '../models/error.model';
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../utils/constants';
+import { REFRESH_TOKEN_SECRET } from '../utils/constants';
 import { getTranslatedMessage } from '../utils/locales/translate-helpers';
 import { UserRepository } from '../db-repositories/user.repo';
-import { generateRefreshToken } from '../utils/jwt/helpers/refresh-token.helper';
 
 
 export interface ICookieData {
@@ -13,9 +12,6 @@ export interface ICookieData {
   expiresIn: number;
 }
 
-interface DataStoredInToken {
-  _id: string;
-}
 
 class AuthenticationService {
   private userRepository = new UserRepository(); 
@@ -29,13 +25,8 @@ class AuthenticationService {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;
 
-    let user = await this.userRepository.Create(userData);
-   // const tokenData = this.createToken(user);
-   // const cookie = this.createCookie(tokenData);
-    return {
-    //  cookie,
-      user,
-    };
+    let user = await this.userRepository.Create(userData); 
+    return { user};
   }
 
   public async loginService(loginData: { email: string, password: string }) {
@@ -50,9 +41,7 @@ class AuthenticationService {
       loginData.password,
       user.password
     );
-    //const tokenData = generateRefreshToken(user);
-   // const cookie = this.createCookie(tokenData);
-
+ 
 
     if (!isPasswordMatching) throw new HttpError(404, "EmailOrPasswordInvalid");
 
@@ -73,17 +62,6 @@ class AuthenticationService {
 
     return `Refresh-Token=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
   }
-  // public createToken(user: IUser): ITokenData {
-  //   const expiresIn = 60 * 60; // an hour
-  //   const secret = ACCESS_TOKEN_SECRET;
-  //   const dataStoredInToken: DataStoredInToken = {
-  //     _id: user._id,
-  //   };
-  //   return {
-  //     expiresIn,
-  //     token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
-  //   };
-  // }
 }
 
 export default AuthenticationService;

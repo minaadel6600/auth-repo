@@ -2,7 +2,6 @@ import { Response, NextFunction } from "express";
 import { resSuccess } from "../utils/response.helper";
 import UserService from "../services/user.service";
 import IRequest from "../interfaces/i-request";
-import { getTranslatedMessage } from "../utils/locales/translate-helpers";
 
 class UsersController {
   private userService = new UserService();
@@ -12,7 +11,6 @@ class UsersController {
     res: Response,
     next: NextFunction
   ) => {
-    const userData = req.body;
     try {
       const users = await this.userService.getAll();
       resSuccess(req, res, 200, "", { users });
@@ -25,10 +23,9 @@ class UsersController {
     res: Response,
     next: NextFunction
   ) => {
-    const userData = req.body;
     try {
       const userId = req.params.id;
-      const user= await this.userService.getById(userId);
+      const user= await this.userService.getUserByIdService(userId);
       resSuccess(req, res, 200, "", { user });
     } catch (error) {
       next(error);
