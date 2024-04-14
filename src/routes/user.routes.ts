@@ -1,20 +1,17 @@
 import { Router } from "express";
-import AuthenticationController from "../controllers/authentication.controller"; 
-import CreateUserDtoSchema  from '../dtos/create-user.dto'
 import dataValidator from "../middlewares/validate-data.middleware";
-import LoginDtoSchema from "../dtos/login.dto";
-import Authorize from "../middlewares/role-authorize";
 import { role } from "../models/user.model";
 import AuthorizeRole from "../middlewares/role-authorize";
 import UsersController from "../controllers/user.controller"; 
 import auth from "../middlewares/auth.middleware";
+import UpdateUserDtoSchema from "../dtos/update-user.dto";
 
 let usersController = new UsersController();
 const router: Router = Router();
 
 router.get('/',auth , AuthorizeRole([role.admin]),usersController.getAllUsers);
-router.get('/:id',dataValidator(LoginDtoSchema), usersController.getAllUsers);
-router.put('/:id',dataValidator(CreateUserDtoSchema), usersController.getAllUsers);
+router.get('/:id',dataValidator(UpdateUserDtoSchema) ,usersController.getAllUsers);
+router.put('/:id' ,dataValidator(UpdateUserDtoSchema), usersController.updateUser);
 
 
 
