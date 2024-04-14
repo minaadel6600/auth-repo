@@ -12,13 +12,13 @@ import { UserRepository } from '../db-repositories/user.repo';
 class UserService {
   public userRepository = new UserRepository();
 
-  public async getAllService() {
+  public async getAllUsersService() {
 
     const users = await this.userRepository.getAll()
     return users
   }
 
-  public async getByIdService(id:string) {
+  public async getUserByIdService(id:string) {
     const user = await this.userRepository.getById(id);
     if(!user) throw new HttpError(404,'user not found');
     return user;
