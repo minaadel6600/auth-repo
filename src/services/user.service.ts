@@ -7,8 +7,6 @@ import { getTranslatedMessage } from '../utils/locales/translate-helpers';
 import { UserRepository } from '../db-repositories/user.repo';
 
 
-
-
 class UserService {
   public userRepository = new UserRepository();
 

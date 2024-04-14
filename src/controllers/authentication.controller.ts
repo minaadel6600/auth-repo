@@ -59,8 +59,8 @@ class AuthenticationController {
       const oldRefreshToken = req.cookies['Refresh-Token']; 
       const user = await this.authenticationService.verifyRefreshTokenService(oldRefreshToken);
       const JWTPayload = { id: user._id };
-      const accessToken = generateAccessToken(JWTPayload, '5h');
-      const refreshToken = generateRefreshToken(JWTPayload, '5d');
+      const accessToken = generateAccessToken(JWTPayload, ACCESS_TOKEN_TIME_IN_HOURS+'h');
+      const refreshToken = generateRefreshToken(JWTPayload, REFRESH_TOKEN_TIME_IN_DAYS+'d');
 
       let cookie = this.authenticationService.createCookie(refreshToken,5)
       res.setHeader('Set-Cookie', [cookie]); 
