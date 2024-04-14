@@ -25,9 +25,9 @@ class UsersController {
     try {
       const userId = req.params.id;
       const userData = req.body;
-      const updatedUser = this.userService.updateUserService(userId, userData);
-
-      resSuccess(req, res, 204, "user updated successfully", { updatedUser });
+      const updatedUser = await this.userService.updateUserService(userId, userData);
+      
+      resSuccess(req, res, 200, "user updated successfully", { updatedUser });
     } catch (error) {
       next(error);
     }
