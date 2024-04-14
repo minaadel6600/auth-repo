@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import express, { Application } from 'express';
 import * as bodyParser from 'body-parser';
 import { MainRouter } from './routes/main.routes';
 import helmet from "helmet";

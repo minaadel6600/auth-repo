@@ -16,6 +16,11 @@ class UserService {
     if(!user) throw new HttpError(404,'user not found');
     return user;
   }
+  public async deleteUserByIdService(id:string) {
+    const user = await this.userRepository.DeleteById(id);
+    if(!user) throw new HttpError(404,'user not found');
+    return user;
+  }
   public async updateUserService(userId:string,data:any) {
 
     const user = await this.userRepository.getById(userId);

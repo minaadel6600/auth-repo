@@ -9,10 +9,10 @@ import UpdateUserDtoSchema from "../dtos/update-user.dto";
 let usersController = new UsersController();
 const router: Router = Router();
 
-router.get('/',auth , AuthorizeRole([role.admin]),usersController.getAllUsers);
-router.get('/:id',dataValidator(UpdateUserDtoSchema) ,usersController.getAllUsers);
+router.get('/',auth , AuthorizeRole([role.end_user]),usersController.getAllUsers);
+router.get('/:id',usersController.getUserById);
 router.put('/:id' ,dataValidator(UpdateUserDtoSchema), usersController.updateUser);
-
+router.delete('/:id' , usersController.deleteUserById);
 
 
 export const UsersRoutes: Router = router;

@@ -26,6 +26,9 @@ export class GenericRepository<T> {
   public async UpdateById(id: string, data: T) {
     return await this._model.findByIdAndUpdate(id, data ,{new: true});
   }
+  public async DeleteById(id: string) {
+    return await this._model.findByIdAndDelete(id);
+  }
 }
 
 export default GenericRepository;
