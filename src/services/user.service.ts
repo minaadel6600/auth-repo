@@ -24,7 +24,13 @@ class UserService {
   
     return user;
   }
+  public async updateUserService(userId:string,data:any) {
 
+    const user = await this.userRepository.getById(userId);
+    if(!user) throw new HttpError(404,'user not found');
+    const updatedUser = await this.userRepository.UpdateById(userId,data)
+    return updatedUser;
+  }
 }
 
 export default UserService;
