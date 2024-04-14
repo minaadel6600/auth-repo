@@ -12,7 +12,7 @@ class UsersController {
     next: NextFunction
   ) => {
     try {
-      const users = await this.userService.getAll();
+      const users = await this.userService.getAllUsersService();
       resSuccess(req, res, 200, "", { users });
     } catch (error) {
       next(error);
