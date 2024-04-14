@@ -31,7 +31,7 @@ class UsersController {
       next(error);
     }
   };
-  public updateUser = (req: IRequest, res: Response, next: NextFunction) => {
+  public updateUser = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.id;
       const userData = req.body;
