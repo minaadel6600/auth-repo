@@ -1,8 +1,8 @@
-import {Request,Response, NextFunction } from 'express'; 
+import {Response, NextFunction } from 'express'; 
 import HttpError from '../models/error.model';
-import IRequest from '../interfaces/i-request';
+import IRequest from '../interfaces/i-request'; 
 
-const dataValidator = (dataSchema:any) => {
+const dataValidator = (dataSchema:any, paramsSchema?:any ) => {
   return  async ( 
   req: IRequest,
   res: Response,
@@ -12,6 +12,9 @@ const dataValidator = (dataSchema:any) => {
     if (!req.body) {
       return res.status(400).send({ message: 'Missing request body!' });
     }
+
+    // to validate the params 
+    if(paramsSchema) await paramsSchema.validateAsync(req.params);
 
     // the validateAsync method is built into Joi
     await dataSchema.validateAsync(req.body);
