@@ -20,7 +20,20 @@ class UsersController {
       next(error);
     }
   };
-
+  public getUserById = async (
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const userData = req.body;
+    try {
+      const userId = req.params.id;
+      const user= await this.userService.getById(userId);
+      resSuccess(req, res, 200, "", { user });
+    } catch (error) {
+      next(error);
+    }
+  };
   public updateUser = (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.id;
