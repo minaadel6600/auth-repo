@@ -25,7 +25,8 @@ class UsersController {
   ) => {
     try {
       const userId = req.params.id;
-      const user= await this.userService.getUserByIdService(userId);
+      let  user= await this.userService.getUserByIdService(userId);
+     
       resSuccess(req, res, 200, "", { user });
     } catch (error) {
       next(error);

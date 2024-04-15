@@ -2,12 +2,12 @@ import * as mongoose from 'mongoose';
 
 export interface IUser {
   _id: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  email: string;
-  roles:[role];
-  password: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  roles?:[role];
+  password?: string;
   address?: {
     street: string,
     city: string,
@@ -26,6 +26,7 @@ export enum role{
 
 const userSchema = new mongoose.Schema(
   {
+    
     email: String,
     firstName: String,
     lastName: String,
@@ -46,6 +47,8 @@ const userSchema = new mongoose.Schema(
     },
   },
 );
+
+
 
 userSchema.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;

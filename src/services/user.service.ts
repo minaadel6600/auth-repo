@@ -1,5 +1,6 @@
 import HttpError from '../models/error.model';
 import { UserRepository } from '../db-repositories/user.repo';
+import { IUser } from '../models/user.model';
 
 
 class UserService {
@@ -8,11 +9,15 @@ class UserService {
   public async getAllUsersService() {
 
     const users = await this.userRepository.getAll()
-    return users
+
+    const usersWithoutPassword = users.map(u=>{ u.password = undefined;return u;})
+
+    return usersWithoutPassword
   }
 
   public async getUserByIdService(id:string) {
     const user = await this.userRepository.getById(id);
+    user.password = undefined;
     if(!user) throw new HttpError(404,'user not found');
     return user;
   }
@@ -25,7 +30,8 @@ class UserService {
 
     const user = await this.userRepository.getById(userId);
     if(!user) throw new HttpError(404,'user not found');
-    const updatedUser = await this.userRepository.UpdateById(userId,data)
+    let updatedUser = await this.userRepository.UpdateById(userId,data)
+    updatedUser.password = undefined;
     return updatedUser;
   }
 }

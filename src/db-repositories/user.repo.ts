@@ -8,4 +8,9 @@ export class UserRepository extends GenericRepository<IUser>{
         super(userModel);
         
     }
+
+    // public async getById(id: string): Promise<IUser>  {
+        
+    //   return await  this._model.find().populate("user",'-password')
+    // }
 }
