@@ -32,13 +32,14 @@ const format = winston.format.combine(
   ),
 )
 
+const todayDate = new Date().toJSON().slice(0, 10);
 const transports = [
   new winston.transports.Console(),
   new winston.transports.File({
-    filename: 'logs/+error.log',
+    filename:  'logs/' + todayDate + '/error.log',
     level: 'error',
   }),
-  new winston.transports.File({ filename: 'logs/all.log' }),
+  new winston.transports.File({ filename: 'logs/' + todayDate + '/all.log' }),
 ]
 
 const Logger = winston.createLogger({
